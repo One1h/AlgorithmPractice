@@ -9,21 +9,23 @@ def pooling(input, size=2, mode='max'):
 
     out = np.zeros((input.shape[0], input.shape[1], size_h, size_w))
 
-    for h in range(size_h):
-        for w in range(size_w):
-            if mode == 'average':
-                out[:, :, h, w] = np.mean(input[:, :,
-                                          h * size : min((h + 1) * size, height),
-                                          w * size : min((w + 1) * size, width)])
-            if mode == 'max':
-                out[:, :, h, w] = np.max(input[:, :,
-                                          h * size : min((h + 1) * size, height),
-                                          w * size : min((w + 1) * size, width)])
+    for n in range(input.shape[0]):
+        for c in range(input.shape[1]):
+            for h in range(size_h):
+                for w in range(size_w):
+                    if mode == 'average':
+                        out[n, c, h, w] = np.mean(input[n, c,
+                                                  h * size: min((h + 1) * size, height),
+                                                  w * size: min((w + 1) * size, width)])
+                    if mode == 'max':
+                        out[n, c, h, w] = np.max(input[n, c,
+                                                 h * size: min((h + 1) * size, height),
+                                                 w * size: min((w + 1) * size, width)])
     return out
 
 
 if __name__ == '__main__':
-    input = np.random.random((1, 1, 5, 5))
+    input = np.random.random((4, 2, 5, 5))
     out = pooling(input)
     print(input)
     print(out)
